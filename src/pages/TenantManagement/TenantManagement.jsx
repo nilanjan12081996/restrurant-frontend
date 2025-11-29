@@ -32,6 +32,8 @@ import AddTenantModal from "./AddTenantModal";
 const TenantManagement = () => {
   const { tenantList } = useSelector((state) => state.tenant);
   const dispatch = useDispatch();
+  const[addResModal,setAddResModal]=useState(false)
+  const[tenantid,setTenantId]=useState()
   const [page, setPage] = useState(1);
 const limit = 10;
   useEffect(() => {
@@ -87,6 +89,18 @@ const limit = 10;
       </Button>
     ),
   },
+    {
+    headerName: "Restrurant",
+    field: "restrurant",
+    cellRenderer: (params) => (
+      <Button
+        onClick={() => handleRestrurant(params.data.id)}
+        className="border text-[#536EFF] border-[#536EFF] bg-white hover:bg-[#536EFF] hover:text-white text-xl px-4 py-0 my-1"
+      >
+        Add New Restrurant
+      </Button>
+    ),
+  },
 ];
 
 const totalPages = tenantList?.meta?.pages || 1;
@@ -114,6 +128,11 @@ const goToNext = () => {
     setOpenManageMerchantDetailsModal(true);
     setOpenMerchantDetailsModal(false);
   };
+
+  const handleRestrurant=(id)=>{
+    setTenantId(id)
+    setAddResModal(true)
+  }
 
   return (
     <div>
@@ -172,6 +191,15 @@ const goToNext = () => {
           <AddTenantModal
           openAddMerchantModal={openAddMerchantModal}
           setOpenAddMerchantModal={setOpenAddMerchantModal}
+          />
+        )
+      }
+      {
+        addResModal&&(
+          <AddRestrurantModal 
+          addResModal={addResModal}
+          setAddResModal={setAddResModal}
+          tenantid={tenantid}
           />
         )
       }

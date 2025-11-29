@@ -28,10 +28,9 @@ import TopicSlice from '../Reducer/TopicSlice';
 import ModuleSlice from '../Reducer/ModuleSlice';
 import PlanKeySlice from '../Reducer/PlanKeySlice';
 import PaymentMethodSlice from '../Reducer/PaymentMethodSlice';
-
-
 import CategorySlice from '../Reducer/CategorySlice';
 import TenantManagementSlice from "../Reducer/TenantManagementSlice"
+import RestrurantSlice from "../Reducer/RestrurantSlice"
 
 
 const store = configureStore({
@@ -64,9 +63,9 @@ const store = configureStore({
     modulesData: ModuleSlice,
     plankey: PlanKeySlice,
     paymentMethod: PaymentMethodSlice,
- 
     cat: CategorySlice,
-    tenant:TenantManagementSlice
+    tenant:TenantManagementSlice,
+    rest:RestrurantSlice
   },
   devTools: import.meta.env.DEV,
 });

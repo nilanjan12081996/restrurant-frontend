@@ -36,8 +36,9 @@ import ManageBatch from '../pages/ManageBatch/ManageBatch.jsx';
 import AddBatch from '../pages/ManageBatch/AddBatch.jsx';
 import ViewBatchDetails from '../pages/ManageBatch/BatchDetails.jsx'
 import MerchantManagement from '../pages/TenantManagement/TenantManagement.jsx';
-import CustomerManagement from '../pages/CustomerManagement/CustomerManagement.jsx';
+import CustomerManagement from '../pages/RestaurantManagement/RestaurantManagement.jsx';
 import TenantManagement from '../pages/TenantManagement/TenantManagement.jsx';
+import RestaurantManagement from '../pages/RestaurantManagement/RestaurantManagement.jsx';
 
 const allRoutes = [
   {
@@ -89,6 +90,16 @@ const allRoutes = [
       {
         index: true,
         element: <TenantManagement />,
+      },
+    ],
+  },
+   {
+    path: '/restaurant-management',
+    element: <InsideLayout />,
+    children: [
+      {
+        index: true,
+        element: <RestaurantManagement />,
       },
     ],
   },
