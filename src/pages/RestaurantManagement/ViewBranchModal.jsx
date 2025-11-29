@@ -8,8 +8,8 @@ const ViewBranchModal = ({ viewBranch, setViewBranch, branchList }) => {
     id: item.id,
     name: item.name,
     slug: item.slug,
-    start_time: JSON.parse(item.opening_hours_json).start_time,
-    end_time: JSON.parse(item.opening_hours_json).end_time,
+    start_time: JSON.parse(item?.opening_hours_json)?.start_time,
+    end_time: JSON.parse(item?.opening_hours_json)?.end_time,
     address: item.address?.address_line1,
     city: item.address?.city,
   }));

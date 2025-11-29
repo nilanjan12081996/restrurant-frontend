@@ -21,6 +21,25 @@ export const getRestrurant = createAsyncThunk(
   }
 );
 
+// Fetch Tenant List All
+export const getTenantListAll = createAsyncThunk(
+  'getTenantListAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`admin/tenant/list`);
+      if (response?.data?.status_code === 200) {
+        return response?.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
+
 export const addRestrurantBranh = createAsyncThunk(
   'addRestrurantBranh',
   async (userInput, { rejectWithValue }) => {
@@ -83,7 +102,8 @@ const initialState={
     res:[],
     branchData:"",
     restAddData:"",
-    branchList:[]
+    branchList:[],
+    allTenantList:{},
 }
 const RestrurantSlice=createSlice({
     name:"rest",
@@ -126,7 +146,7 @@ const RestrurantSlice=createSlice({
             state.loading=false
             state.error=payload
         })
-              .addCase(restrurantBranchList.pending,(state)=>{
+        .addCase(restrurantBranchList.pending,(state)=>{
             state.loading=true
         })
         .addCase(restrurantBranchList.fulfilled,(state,{payload})=>{
@@ -135,6 +155,18 @@ const RestrurantSlice=createSlice({
             state.error=false
         })
         .addCase(restrurantBranchList.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload
+        })
+        .addCase(getTenantListAll.pending,(state)=>{
+            state.loading=true
+        })
+        .addCase(getTenantListAll.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.allTenantList=payload
+            state.error=false
+        })
+        .addCase(getTenantListAll.rejected,(state,{payload})=>{
             state.loading=false
             state.error=payload
         })
