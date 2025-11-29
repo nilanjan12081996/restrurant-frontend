@@ -1,7 +1,7 @@
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { addRestrurant } from "../../Reducer/RestrurantSlice";
+import {  addRestrurantBranh } from "../../Reducer/RestrurantSlice";
 
 const AddBranchModal=({openManageCustomerDetailsModal,setOpenManageCustomerDetailsModal,restaurantId })=>{
     const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const AddBranchModal=({openManageCustomerDetailsModal,setOpenManageCustomerDetai
       longitude: data.longitude,
     };
 
-    dispatch(addRestrurant(payload)).then((res)=>{
+    dispatch(addRestrurantBranh(payload)).then((res)=>{
         console.log("Res",res);
         if(res?.payload?.status_code===201){
             setOpenManageCustomerDetailsModal(false)

@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getTenantList } from "../../Reducer/TenantManagementSlice";
 import AddTenantModal from "./AddTenantModal";
+import AddRestrurantModal from "../RestaurantManagement/AddRestrurantModal";
 
 const TenantManagement = () => {
   const { tenantList } = useSelector((state) => state.tenant);
@@ -196,7 +197,7 @@ const goToNext = () => {
       }
       {
         addResModal&&(
-          <AddRestrurantModal 
+          <AddRestrurantModal
           addResModal={addResModal}
           setAddResModal={setAddResModal}
           tenantid={tenantid}

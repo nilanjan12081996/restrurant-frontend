@@ -21,8 +21,8 @@ export const getRestrurant = createAsyncThunk(
   }
 );
 
-export const addRestrurant = createAsyncThunk(
-  'addRestrurant',
+export const addRestrurantBranh = createAsyncThunk(
+  'addRestrurantBranh',
   async (userInput, { rejectWithValue }) => {
     try {
       const response = await api.post(`admin/restaurant/branch/add`,userInput);
@@ -39,11 +39,51 @@ export const addRestrurant = createAsyncThunk(
   }
 );
 
+
+export const addRestrurant = createAsyncThunk(
+  'addRestrurant',
+  async (userInput, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`admin/restaurant/add`,userInput);
+      if (response?.data?.status_code === 201) {
+        return response?.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
+
+
+export const restrurantBranchList = createAsyncThunk(
+  'restrurantBranchList',
+  async ({id}, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`admin/restaurant/branch/list/${id}`);
+      if (response?.data?.status_code === 200) {
+        return response?.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
+
 const initialState={
     loading:false,
     error:false,
     res:[],
-    branchData:""
+    branchData:"",
+    restAddData:"",
+    branchList:[]
 }
 const RestrurantSlice=createSlice({
     name:"rest",
@@ -62,15 +102,39 @@ const RestrurantSlice=createSlice({
             state.loading=false
             state.error=payload
         })
-        .addCase(addRestrurant.pending,(state)=>{
+        .addCase(addRestrurantBranh.pending,(state)=>{
             state.loading=true
         })
-        .addCase(addRestrurant.fulfilled,(state,{payload})=>{
+        .addCase(addRestrurantBranh.fulfilled,(state,{payload})=>{
             state.loading=false
             state.branchData=payload
             state.error=false
         })
+        .addCase(addRestrurantBranh.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload
+        })
+         .addCase(addRestrurant.pending,(state)=>{
+            state.loading=true
+        })
+        .addCase(addRestrurant.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.restAddData=payload
+            state.error=false
+        })
         .addCase(addRestrurant.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload
+        })
+              .addCase(restrurantBranchList.pending,(state)=>{
+            state.loading=true
+        })
+        .addCase(restrurantBranchList.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.branchList=payload
+            state.error=false
+        })
+        .addCase(restrurantBranchList.rejected,(state,{payload})=>{
             state.loading=false
             state.error=payload
         })

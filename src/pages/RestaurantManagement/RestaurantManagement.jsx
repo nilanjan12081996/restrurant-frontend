@@ -26,11 +26,14 @@ import { HiOutlineMail } from "react-icons/hi";
 import { FiPhoneCall } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getRestrurant } from "../../Reducer/RestrurantSlice";
+import { getRestrurant, restrurantBranchList } from "../../Reducer/RestrurantSlice";
 import AddBranchModal from "./AddBranchModal";
+import ViewBranchModal from "./ViewBranchModal";
 
 const RestaurantManagement = () => {
-  const { res, loading } = useSelector((state) => state.rest);
+  const { res, loading,branchList } = useSelector((state) => state.rest);
+  const[viewBranch,setViewBranch]=useState(false)
+  const[restruId,setRestruId]=useState()
   const[addresModal,setAddResmodal]=useState(false)
   const [openCustomerDetailsModal, setOpenCustomerDetailsModal] =
     useState(false);
@@ -74,6 +77,15 @@ const rowData = res?.res || [];
         Add Branch
       </Button>
     ),
+  },
+    {
+    headerName: "Branch",
+    field: "branch",
+    cellRenderer: (params) => (
+      <Button className="bg-blue-500" onClick={() => handleviewBranch(params.data.id)}>
+        View Branch
+      </Button>
+    ),
   }
 ];
 
@@ -90,7 +102,11 @@ const rowData = res?.res || [];
   // const handleRest=()=>{
   //   setAddResmodal(true)
   // }
-
+const handleviewBranch=(id)=>{
+setRestruId(id)
+setViewBranch(true)
+dispatch(restrurantBranchList({id:id}))
+}
   return (
     <div>
       <ToastContainer />
@@ -412,6 +428,15 @@ const rowData = res?.res || [];
             openManageCustomerDetailsModal={openManageCustomerDetailsModal}
             setOpenManageCustomerDetailsModal={setOpenManageCustomerDetailsModal}
              restaurantId={selectedRestaurantId}
+            />
+          )
+        }
+        {
+          viewBranch&&(
+            <ViewBranchModal
+            viewBranch={viewBranch}
+            setViewBranch={setViewBranch}
+            branchList={branchList}
             />
           )
         }
