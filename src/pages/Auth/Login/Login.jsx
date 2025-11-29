@@ -78,9 +78,6 @@ const Login = () => {
     });
   };
 
-  const handleLogin = () => {
-    navigate("/dashboard");
-  };
 
   return (
     <div className="my-0 lg:my-0 mx-4 lg:mx-0 flex justify-center items-center wrapper_bg_area">
@@ -112,18 +109,18 @@ const Login = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="mb-6">
                     <Label className="text-base text-[#263A43] font-medium pb-2 block">
-                      User name
+                      Email
                     </Label>
                     <input
                       type="text"
                       id="email"
                       className="bg-white border border-[#dfdfdf] text-[#888888] text-sm rounded-lg focus:ring-[#f1d9ff] focus:border-[#f1d9ff] block w-full py-3 px-3"
-                      placeholder="Enter Your User Name"
-                      {...register("username", { required: true })}
+                      placeholder="Enter Your Email"
+                      {...register("email", { required: true })}
                     />
-                    {errors.username && (
+                    {errors.email && (
                       <small className="text-red-500">
-                        User Name is required
+                       Email is required
                       </small>
                     )}
                   </div>
@@ -178,8 +175,8 @@ const Login = () => {
                   </div> */}
 
                   <button
-                    onClick={handleLogin}
-                    type="button"
+                    
+                    type="submit"
                     className="text-[#ffffff] hover:text-white bg-[#BD55C6] font-medium mb-2 hover:bg-[#0B2C3F] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-md text-[20px] w-full px-5 py-3.5 text-center"
                   >
                     {loadingLogin ? "Wait..." : "Log In"}

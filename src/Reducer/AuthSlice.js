@@ -63,7 +63,7 @@ export const login = createAsyncThunk(
     async (userInput, { rejectWithValue }) => {
 
         try {
-            const response = await api.post('/admin-auth/login', userInput);
+            const response = await api.post('admin-auth/login', userInput);
             if (response?.data?.status_code === 200) {
                 return response.data;
             } else {

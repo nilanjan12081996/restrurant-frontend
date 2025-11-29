@@ -28,9 +28,10 @@ import TopicSlice from '../Reducer/TopicSlice';
 import ModuleSlice from '../Reducer/ModuleSlice';
 import PlanKeySlice from '../Reducer/PlanKeySlice';
 import PaymentMethodSlice from '../Reducer/PaymentMethodSlice';
-import CourseSlice from '../Reducer/CourseSlice';
+
 
 import CategorySlice from '../Reducer/CategorySlice';
+import TenantManagementSlice from "../Reducer/TenantManagementSlice"
 
 
 const store = configureStore({
@@ -40,7 +41,6 @@ const store = configureStore({
     plan: PlanSlice,
     product: ProductSlice,
     pricing: PricingSlice,
-    coupon: CouponSlice,
     upSellProduct: UpSellSlice,
     downSellProduct: DownSellSlice,
     editor: EditorSlice,
@@ -64,8 +64,9 @@ const store = configureStore({
     modulesData: ModuleSlice,
     plankey: PlanKeySlice,
     paymentMethod: PaymentMethodSlice,
-    courses: CourseSlice,
+ 
     cat: CategorySlice,
+    tenant:TenantManagementSlice
   },
   devTools: import.meta.env.DEV,
 });

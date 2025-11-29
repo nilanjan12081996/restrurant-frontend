@@ -35,8 +35,9 @@ import CourseDetails from '../pages/ManageCourses/CourseDetails.jsx';
 import ManageBatch from '../pages/ManageBatch/ManageBatch.jsx';
 import AddBatch from '../pages/ManageBatch/AddBatch.jsx';
 import ViewBatchDetails from '../pages/ManageBatch/BatchDetails.jsx'
-import MerchantManagement from '../pages/MerchantManagement/MerchantManagement.jsx';
+import MerchantManagement from '../pages/TenantManagement/TenantManagement.jsx';
 import CustomerManagement from '../pages/CustomerManagement/CustomerManagement.jsx';
+import TenantManagement from '../pages/TenantManagement/TenantManagement.jsx';
 
 const allRoutes = [
   {
@@ -82,12 +83,12 @@ const allRoutes = [
     ],
   },
   {
-    path: '/merchant-management',
+    path: '/tenant-management',
     element: <InsideLayout />,
     children: [
       {
         index: true,
-        element: <MerchantManagement />,
+        element: <TenantManagement />,
       },
     ],
   },

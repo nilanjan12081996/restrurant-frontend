@@ -14,8 +14,10 @@ api.interceptors.request.use((req) => {
   let token = userTokenData && userTokenData.token ? userTokenData.token : null;
   // console.log("Req: ", req.url);
   req.headers['Content-Type'] = 'application/json';
+  req.headers['x-api-key']='dGhpc2lzZnJvbnRlbmQ='
   if (formDataURL.includes(req.url)) {
     req.headers['Content-Type'] = 'multipart/form-data';
+     req.headers['x-api-key']='dGhpc2lzZnJvbnRlbmQ='
   }
   if (token) {
     req.headers.Authorization = `Bearer ${token}`;

@@ -26,97 +26,81 @@ import { FiPhoneCall } from "react-icons/fi";
 import { HiOutlineMail } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getCategory } from "../../Reducer/CategorySlice";
+import { getTenantList } from "../../Reducer/TenantManagementSlice";
+import AddTenantModal from "./AddTenantModal";
 
-const MerchantManagement = () => {
-  const { allCat } = useSelector((state) => state.cat);
+const TenantManagement = () => {
+  const { tenantList } = useSelector((state) => state.tenant);
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+const limit = 10;
   useEffect(() => {
-    dispatch(getCategory());
-  }, []);
-  console.log(allCat, "Cat List");
+    dispatch(getTenantList({
+      page: page, limit 
+    }));
+  }, [page]);
+  console.log(tenantList, "Cat List");
   const [openAddMerchantModal, setOpenAddMerchantModal] = useState(false);
   const [openMerchantDetailsModal, setOpenMerchantDetailsModal] =
     useState(false);
   const [openManageMerchantDetailsModal, setOpenManageMerchantDetailsModal] =
     useState(false);
   const navigate = useNavigate();
-  const [rowData] = useState([
-    {
-      name: "Erik Sarkar",
-      email: "ErikSarkar2@gmail.com",
-      shopname: "Burger Shot",
-      phone: "+91 -3721909981",
-      walletbalance: "₹2300",
-      pointtransaction: "1000 Points",
-      status: "Active",
-      lastactive: "03 Jul 2025",
-    },
-  ]);
+ const rowData = tenantList?.data || [];
 
-  const [columnDefs] = useState([
-    {
-      field: "name",
-      headerName: "MERCHANT NAME",
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: "email",
-      headerName: "EMAIL ID",
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: "shopname",
-      headerName: "SHOP NAME",
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: "phone",
-      headerName: "PHONE NUMBER",
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: "walletbalance",
-      headerName: "WALLET BALANCE",
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: "pointtransaction",
-      headerName: "POINT TRANSACTION",
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: "status",
-      headerName: "STATUS",
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: "lastactive",
-      headerName: "LAST ACTIVE",
-      sortable: true,
-      filter: true,
-    },
+ const columnDefs = [
+  {
+    field: "name",
+    headerName: "TENANT NAME",
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: "slug",
+    headerName: "SLUG",
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: "status",
+    headerName: "STATUS",
+    sortable: true,
+    filter: true,
+  },
+  {
+    field: "created_at",
+    headerName: "CREATED AT",
+    sortable: true,
+    filter: true,
+    valueFormatter: (params) =>
+      params.value ? new Date(params.value).toLocaleDateString() : "-",
+  },
+  {
+    headerName: "ACTIONS",
+    field: "actions",
+    cellRenderer: () => (
+      <Button
+        onClick={() => handleMerchantDetails()}
+        className="border text-[#536EFF] border-[#536EFF] bg-white hover:bg-[#536EFF] hover:text-white text-xl px-4 py-0 my-1"
+      >
+        View Details
+      </Button>
+    ),
+  },
+];
 
-    {
-      headerName: "ACTIONS",
-      field: "actions",
-      cellRenderer: () => (
-        <Button
-          onClick={() => handleMerchantDetails()}
-          className="border text-[#536EFF] border-[#536EFF] bg-white hover:bg-[#536EFF] hover:text-white text-xl px-4 py-0 my-1"
-        >
-          View Details
-        </Button>
-      ),
-    },
-  ]);
+const totalPages = tenantList?.meta?.pages || 1;
+
+const goToPrevious = () => {
+  if (page > 1) setPage(page - 1);
+};
+
+const goToNext = () => {
+  if (page < totalPages) setPage(page + 1);
+};
+
+
+
 
   const handleAddMerchant = () => {
     setOpenAddMerchantModal(true);
@@ -137,13 +121,13 @@ const MerchantManagement = () => {
       <div className="wrapper_area my-0 mx-auto p-6 rounded-xl bg-white">
         <div className="h-full lg:h-screen">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">Merchant List</h2>
+            <h2 className="text-2xl font-semibold">Tenant List</h2>
             <Button
               onClick={() => handleAddMerchant()}
               className="bg-[#536EFF] hover:bg-[#E7E7FF] px-4 py-1 text-white hover:text-[#536EFF] text-base font-semibold flex justify-center items-center rounded-md"
             >
               <CgAdd className="text-[18px] mr-1" />
-              Register New Merchant
+              Add New Tentant
             </Button>
           </div>
           <div
@@ -153,147 +137,47 @@ const MerchantManagement = () => {
             <AgGridReact
               rowData={rowData}
               columnDefs={columnDefs}
-              pagination={true}
+              pagination={false}
               paginationPageSize={10}
               domLayout="autoHeight"
+
             />
           </div>
+            <div className="flex justify-center items-center gap-4 mt-4">
+          <button
+            onClick={goToPrevious}
+            disabled={page === 1}
+            className="px-4 py-2 border rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+
+          <span className="font-semibold">
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            onClick={goToNext}
+            disabled={page === totalPages}
+            className="px-4 py-2 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+            </div>
         </div>
       </div>
       {/* Register New Merchant modal start here */}
-      <Modal
-        show={openAddMerchantModal}
-        onClose={() => setOpenAddMerchantModal(false)}
-      >
-        <Modal.Header className="text-[#435971]">
-          Register New Merchant
-        </Modal.Header>
-        <Modal.Body>
-          <div className="space-y-4 h-[500px] overflow-y-scroll">
-            <div>
-              <div className="mb-1 block">
-                <Label value="Merchant Name *" />
-              </div>
-              <TextInput
-                type="text"
-                placeholder="Enter Merchant Name"
-                required
-              />
-            </div>
-            <div className="flex gap-4">
-              <div className="w-6/12">
-                <div className="mb-1 block">
-                  <Label value="Email Id *" />
-                </div>
-                <TextInput type="email" placeholder="Enter Email Id" required />
-              </div>
-              <div className="w-6/12">
-                <div className="mb-1 block">
-                  <Label value="Phone Number *" />
-                </div>
-                <TextInput
-                  type="tel"
-                  placeholder="Enter Mobile Number"
-                  required
-                />
-              </div>
-            </div>
-            <div>
-              <div className="mb-1 block">
-                <Label value="Shop Name *" />
-              </div>
-              <TextInput
-                type="text"
-                placeholder="Enter Company  Name"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-1 block">
-                <Label value="Shop GSTIN No. *" />
-              </div>
-              <TextInput type="text" placeholder="Enter GSTIN No." required />
-            </div>
-            <div className="flex gap-4">
-              <div className="w-6/12">
-                <div className="mb-1 block">
-                  <Label value="Choose State *" />
-                </div>
-                <Select required>
-                  <option>Choose State</option>
-                  <option>West bengal</option>
-                </Select>
-              </div>
-              <div className="w-6/12">
-                <div className="mb-1 block">
-                  <Label value="Choose City *" />
-                </div>
-                <Select required>
-                  <option>Choose City</option>
-                  <option>Kolkata</option>
-                </Select>
-              </div>
-            </div>
-            <div>
-              <div className="mb-1 block">
-                <Label value="Address *" />
-              </div>
-              <Textarea placeholder="Enter Address" required rows={4} />
-            </div>
-            <div>
-              <div className="mb-1 block">
-                <Label value="Profile Image" />
-              </div>
-              <div className="flex w-full items-center justify-center">
-                <Label
-                  htmlFor="dropzone-file"
-                  className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                >
-                  <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                    <svg
-                      className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
-                    </p>
-                  </div>
-                  <FileInput id="dropzone-file" className="hidden" />
-                </Label>
-              </div>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-end">
-          <Button
-            className="bg-white text-gray-700 hover:bg-[#9b1c1c] hover:text-white border border-gray-300"
-            onClick={() => setOpenAddMerchantModal(false)}
-          >
-            Cancel
-          </Button>
-          <Button className="bg-[#686AF8] hover:bg-black">
-            Register Merchant
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {
+        openAddMerchantModal&&(
+          <AddTenantModal
+          openAddMerchantModal={openAddMerchantModal}
+          setOpenAddMerchantModal={setOpenAddMerchantModal}
+          />
+        )
+      }
       {/* Register New Merchant modal ends here */}
       {/* Merchant Details modal start here */}
-      <Modal
+      {/* <Modal
         show={openMerchantDetailsModal}
         onClose={() => setOpenMerchantDetailsModal(false)}
       >
@@ -518,10 +402,10 @@ const MerchantManagement = () => {
             Manage Merchant
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
       {/* Merchant Details modal ends here */}
       {/* Manage Merchant Details modal start here */}
-      <Modal
+      {/* <Modal
         show={openManageMerchantDetailsModal}
         onClose={() => setOpenManageMerchantDetailsModal(false)}
       >
@@ -759,10 +643,10 @@ const MerchantManagement = () => {
           </Button>
           <Button className="bg-[#686AF8] hover:bg-black">Save & Update</Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
       {/* Manage Merchant Details modal ends here */}
     </div>
   );
 };
 
-export default MerchantManagement;
+export default TenantManagement;
