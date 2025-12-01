@@ -34,13 +34,23 @@ import {
 import AddBranchModal from "./AddBranchModal";
 import ViewBranchModal from "./ViewBranchModal";
 import AddRestrurantModal from "./AddRestrurantModal";
+import UpdateRestrurantModal from "./UpdateRestrurantModal";
+import { getMenu } from "../../Reducer/MenuSlice";
+import MenuManagement from "../MenuManagement/MenuManagement";
+import AddMenuModal from "../MenuManagement/AddMenuModal";
+import MenuSectionModal from "../MenuManagement/MenuSectionModal";
 
 const RestaurantManagement = () => {
-  const { res, loading, branchList } = useSelector((state) => state.rest);
+  const { res, loading, branchList,editRest } = useSelector((state) => state.rest);
+  const{menus}=useSelector((state)=>state?.menu)
   const [viewBranch, setViewBranch] = useState(false);
   const [restruId, setRestruId] = useState();
   const [addresModal, setAddResmodal] = useState(false);
   const [addResModal, setAddResModal] = useState(false);
+  const[menuModal,setMenumodal]=useState(false)
+  const[menuId,setMenuId]=useState()
+  const[addMenuModal,setAddMenuModal]=useState(false)
+  const[menuSectionModal,setMenuSectionModal]=useState(false)
   const [openCustomerDetailsModal, setOpenCustomerDetailsModal] =
     useState(false);
   const [openManageCustomerDetailsModal, setOpenManageCustomerDetailsModal] =
@@ -89,8 +99,8 @@ const RestaurantManagement = () => {
     {
       headerName: "Actions",
       field: "actions",
-      cellRenderer: () => (
-        <Button className="bg-blue-500" onClick={() => handleCustomerDetails()}>
+      cellRenderer: (params) => (
+        <Button className="bg-blue-500" onClick={() => handleCustomerDetails(params.data.id)}>
           Update
         </Button>
       ),
@@ -119,10 +129,24 @@ const RestaurantManagement = () => {
         </Button>
       ),
     },
+     {
+      headerName: "Menu Option",
+      field: "Menu",
+      cellRenderer: (params) => (
+        <Button
+          className="bg-blue-500"
+          onClick={() => handleviewMenu(params.data.id)}
+        >
+          View Menu Details
+        </Button>
+      ),
+    },
   ];
 
-  const handleCustomerDetails = () => {
+  const handleCustomerDetails = (id) => {
     setOpenCustomerDetailsModal(true);
+    setRestruId(id)
+     dispatch(getTenantListAll());
   };
 
   const handleManageCustomerDetails = (id) => {
@@ -144,6 +168,17 @@ const RestaurantManagement = () => {
     dispatch(getTenantListAll());
     setAddResModal(true);
   };
+  const handleviewMenu=(id)=>{
+    setMenumodal(true)
+    setRestruId(id)
+    dispatch(getMenu({id}))
+
+  }
+  const handleAddMenuSection=(id)=>{
+    setMenuId(id)
+    setMenuSectionModal(true)
+    dispatch(getTenantListAll());
+}
 
   return (
     <div>
@@ -195,6 +230,49 @@ const RestaurantManagement = () => {
           setAddResModal={setAddResModal}
         />
       )}
+      {
+        openCustomerDetailsModal&&(
+          <UpdateRestrurantModal
+          openCustomerDetailsModal={openCustomerDetailsModal}
+          setOpenCustomerDetailsModal={setOpenCustomerDetailsModal}
+          restruId={restruId}
+          />
+        )
+      }
+      {
+        menuModal&&(
+          <MenuManagement
+          menuModal={menuModal}
+          setMenumodal={setMenumodal}
+          menus={menus}
+          setAddMenuModal={setAddMenuModal}
+          setRestruId={setRestruId}
+           setMenuSectionModal={setMenuSectionModal}
+            setMenuId={setMenuId}
+            handleAddMenuSection={handleAddMenuSection}
+          />
+        )
+      }
+      {
+        addMenuModal&&(
+          <AddMenuModal
+          addMenuModal={addMenuModal}
+          setAddMenuModal={setAddMenuModal}
+          setRestruId={setRestruId}
+          restruId={restruId}
+          />
+        )
+      }
+      {
+        menuSectionModal&&(
+          <MenuSectionModal
+          menuSectionModal={menuSectionModal}
+          setMenuSectionModal={setMenuSectionModal}
+          menuId={menuId}
+          setMenuId={setMenuId}
+          />
+        )
+      }
     </div>
   );
 };

@@ -31,6 +31,7 @@ import PaymentMethodSlice from '../Reducer/PaymentMethodSlice';
 import CategorySlice from '../Reducer/CategorySlice';
 import TenantManagementSlice from "../Reducer/TenantManagementSlice"
 import RestrurantSlice from "../Reducer/RestrurantSlice"
+import MenuSlice from "../Reducer/MenuSlice"
 
 
 const store = configureStore({
@@ -65,7 +66,8 @@ const store = configureStore({
     paymentMethod: PaymentMethodSlice,
     cat: CategorySlice,
     tenant:TenantManagementSlice,
-    rest:RestrurantSlice
+    rest:RestrurantSlice,
+    menu:MenuSlice
   },
   devTools: import.meta.env.DEV,
 });

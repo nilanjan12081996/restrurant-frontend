@@ -49,7 +49,7 @@ const UpdateTenantModal=({ openMerchantDetailsModal,
                 onSubmit={handleSubmit(onSubmit)}
                 >
                 <Modal.Header className="text-[#435971]">
-                  Add New Tenant
+                  Update Tenant
                 </Modal.Header>
                 <Modal.Body>
                   <div className="space-y-4 h-[200px]">

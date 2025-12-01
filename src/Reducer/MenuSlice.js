@@ -3,11 +3,68 @@ import api from '../store/Api';
 import errorHandler from '../store/ErrorHandler';
 
 
-export const getRestrurant = createAsyncThunk(
-  'getRestrurant',
-  async (_, { rejectWithValue }) => {
+export const getMenu = createAsyncThunk(
+  'getMenu',
+  async ({id}, { rejectWithValue }) => {
     try {
-      const response = await api.get(`admin/restaurant/list`);
+      const response = await api.get(`admin/restaurant/menus?restaurant_id=${id}`);
+      if (response?.data?.status_code === 200) {
+        return response?.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
+
+
+export const addMenu = createAsyncThunk(
+  'addMenu',
+  async (userInput, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`admin/restaurant/menus/create`,userInput);
+      if (response?.data?.status_code === 201) {
+        return response?.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
+
+
+export const addMenuSection = createAsyncThunk(
+  'addMenuSection',
+  async (userInput, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`admin/restaurant/menus/add-menusections`,userInput);
+      if (response?.data?.status_code === 201) {
+        return response?.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
+
+
+export const getMenuSection = createAsyncThunk(
+  'getMenuSection',
+  async ({id}, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`admin/restaurant/menus/${id}`);
       if (response?.data?.status_code === 200) {
         return response?.data;
       } else {
@@ -137,40 +194,43 @@ export const restrurantBranchList = createAsyncThunk(
 const initialState={
     loading:false,
     error:false,
-    res:[],
-    branchData:"",
+    menus:[],
+    addMenuData:"",
     restAddData:"",
     branchList:[],
     allTenantList:{},
     editRest:"",
-    updateData:""
+    updateData:"",
+    menuSectionData:"",
+    allMenuSection:[]
+
 }
-const RestrurantSlice=createSlice({
-    name:"rest",
+const MenuSlice=createSlice({
+    name:"menu",
     initialState,
     reducers:{},
     extraReducers:(builder)=>{
-        builder.addCase(getRestrurant.pending,(state)=>{
+        builder.addCase(getMenu.pending,(state)=>{
             state.loading=true
         })
-        .addCase(getRestrurant.fulfilled,(state,{payload})=>{
+        .addCase(getMenu.fulfilled,(state,{payload})=>{
             state.loading=false
-            state.res=payload
+            state.menus=payload
             state.error=false
         })
-        .addCase(getRestrurant.rejected,(state,{payload})=>{
+        .addCase(getMenu.rejected,(state,{payload})=>{
             state.loading=false
             state.error=payload
         })
-        .addCase(addRestrurantBranh.pending,(state)=>{
+        .addCase(addMenu.pending,(state)=>{
             state.loading=true
         })
-        .addCase(addRestrurantBranh.fulfilled,(state,{payload})=>{
+        .addCase(addMenu.fulfilled,(state,{payload})=>{
             state.loading=false
-            state.branchData=payload
+            state.addMenuData=payload
             state.error=false
         })
-        .addCase(addRestrurantBranh.rejected,(state,{payload})=>{
+        .addCase(addMenu.rejected,(state,{payload})=>{
             state.loading=false
             state.error=payload
         })
@@ -234,7 +294,31 @@ const RestrurantSlice=createSlice({
             state.loading=false
             state.error=payload
         })
+                   .addCase(addMenuSection.pending,(state)=>{
+            state.loading=true
+        })
+        .addCase(addMenuSection.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.menuSectionData=payload
+            state.error=false
+        })
+        .addCase(addMenuSection.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload
+        })
+                     .addCase(getMenuSection.pending,(state)=>{
+            state.loading=true
+        })
+        .addCase(getMenuSection.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.allMenuSection=payload
+            state.error=false
+        })
+        .addCase(getMenuSection.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload
+        })
     }
 
 })
-export default RestrurantSlice.reducer;
+export default MenuSlice.reducer;

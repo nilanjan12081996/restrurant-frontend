@@ -39,6 +39,7 @@ import MerchantManagement from '../pages/TenantManagement/TenantManagement.jsx';
 import CustomerManagement from '../pages/RestaurantManagement/RestaurantManagement.jsx';
 import TenantManagement from '../pages/TenantManagement/TenantManagement.jsx';
 import RestaurantManagement from '../pages/RestaurantManagement/RestaurantManagement.jsx';
+import MenuSectionList from '../pages/MenuManagement/MenuSectionList.jsx';
 
 const allRoutes = [
   {
@@ -100,6 +101,16 @@ const allRoutes = [
       {
         index: true,
         element: <RestaurantManagement />,
+      },
+    ],
+  },
+    {
+    path: '/menusection-list',
+    element: <InsideLayout />,
+    children: [
+      {
+        index: true,
+        element: <MenuSectionList />,
       },
     ],
   },
