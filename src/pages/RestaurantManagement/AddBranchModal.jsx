@@ -2,6 +2,7 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addRestrurantBranh } from "../../Reducer/RestrurantSlice";
+import { toast } from "react-toastify";
 
 const AddBranchModal = ({
   openManageCustomerDetailsModal,
@@ -55,6 +56,7 @@ const AddBranchModal = ({
     dispatch(addRestrurantBranh(payload)).then((res) => {
       console.log("Res", res);
       if (res?.payload?.status_code === 201) {
+        toast.success(res?.payload.message)
         setOpenManageCustomerDetailsModal(false);
       }
     });
