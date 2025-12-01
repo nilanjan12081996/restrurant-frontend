@@ -39,7 +39,42 @@ export const addTenant = createAsyncThunk(
   }
 )
 
+export const getSingleTenant = createAsyncThunk(
+  'getSingleTenant',
+  async ({id}, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`admin/tenant/${id}`);
+      if (response?.data?.status_code === 200) {
+        return response?.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
 
+export const updateTenant = createAsyncThunk(
+  "updateTenant",
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`admin/tenant/edit/${id}`, data);
+
+      if (response?.data?.status_code === 200) {
+        return response.data;
+      } else {
+        let errors = errorHandler(response);
+        return rejectWithValue(errors);
+      }
+    } catch (error) {
+      let errors = errorHandler(error);
+      return rejectWithValue(errors);
+    }
+  }
+);
 
 //get single coupon
 
@@ -128,7 +163,9 @@ const initialState = {
   singleCoupon: {},
   active_inactive: {},
   validate:"",
-  createTenantData:""
+  createTenantData:"",
+  singleTenant:[],
+  updateTenantData:""
 };
 
 // Reducer
@@ -236,6 +273,39 @@ const TenantManagementSlice = createSlice({
         state.error=false
       })
       .addCase(couponValidate.rejected,(state,{payload})=>{
+         state.loading = false;
+        state.error = true;
+        state.message =
+          payload !== undefined && payload.message
+            ? payload.message
+            : 'Something went wrong. Try again later.';
+      })
+           .addCase(getSingleTenant.pending,(state)=>{
+        state.loading=true
+      })
+      .addCase(getSingleTenant.fulfilled,(state,{payload})=>{
+        state.loading=false
+        state.singleTenant=payload
+        state.error=false
+      })
+      .addCase(getSingleTenant.rejected,(state,{payload})=>{
+         state.loading = false;
+        state.error = true;
+        state.message =
+          payload !== undefined && payload.message
+            ? payload.message
+            : 'Something went wrong. Try again later.';
+      })
+
+           .addCase(updateTenant.pending,(state)=>{
+        state.loading=true
+      })
+      .addCase(updateTenant.fulfilled,(state,{payload})=>{
+        state.loading=false
+        state.updateTenantData=payload
+        state.error=false
+      })
+      .addCase(updateTenant.rejected,(state,{payload})=>{
          state.loading = false;
         state.error = true;
         state.message =

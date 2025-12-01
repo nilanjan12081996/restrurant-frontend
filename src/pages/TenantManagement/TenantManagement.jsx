@@ -26,14 +26,16 @@ import { FiPhoneCall } from "react-icons/fi";
 import { HiOutlineMail } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getTenantList } from "../../Reducer/TenantManagementSlice";
+import { getSingleTenant, getTenantList } from "../../Reducer/TenantManagementSlice";
 import AddTenantModal from "./AddTenantModal";
 import AddRestrurantModal from "../RestaurantManagement/AddRestrurantModal";
+import UpdateTenantModal from "./UpdateTenantModal";
 
 const TenantManagement = () => {
   const { tenantList } = useSelector((state) => state.tenant);
   const dispatch = useDispatch();
   const [addResModal, setAddResModal] = useState(false);
+
   const [tenantid, setTenantId] = useState();
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -85,9 +87,9 @@ const TenantManagement = () => {
       headerName: "ACTIONS",
       field: "actions",
       minWidth: "500px",
-      cellRenderer: () => (
+      cellRenderer: (params) => (
         <Button
-          onClick={() => handleMerchantDetails()}
+          onClick={() => handleMerchantDetails(params.data.id)}
           className="border text-[#536EFF] border-[#536EFF] bg-white hover:bg-[#536EFF] hover:text-white text-xl px-4 py-0 my-1"
         >
           Update
@@ -122,19 +124,16 @@ const TenantManagement = () => {
     setOpenAddMerchantModal(true);
   };
 
-  const handleMerchantDetails = () => {
+  const handleMerchantDetails = (id) => {
+    console.log("id",id);
+    
     setOpenMerchantDetailsModal(true);
+    setTenantId(id)
+    dispatch(getSingleTenant({id}))
   };
 
-  const handleManageMerchantDetails = () => {
-    setOpenManageMerchantDetailsModal(true);
-    setOpenMerchantDetailsModal(false);
-  };
 
-  const handleRestrurant = (id) => {
-    setTenantId(id);
-    setAddResModal(true);
-  };
+
 
   return (
     <div>
@@ -193,13 +192,13 @@ const TenantManagement = () => {
           setOpenAddMerchantModal={setOpenAddMerchantModal}
         />
       )}
-      {/* {addResModal && (
-        <AddRestrurantModal
-          addResModal={addResModal}
-          setAddResModal={setAddResModal}
+      {openMerchantDetailsModal && (
+        <UpdateTenantModal
+          openMerchantDetailsModal={openMerchantDetailsModal}
+          setOpenMerchantDetailsModal={setOpenMerchantDetailsModal}
           tenantid={tenantid}
         />
-      )} */}
+      )}
     </div>
   );
 };
