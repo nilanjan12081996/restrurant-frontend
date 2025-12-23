@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import Header from "../layout/header";
+import Header from "../layout/Header";
 import Sidebar from "../layout/Sidebar";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
